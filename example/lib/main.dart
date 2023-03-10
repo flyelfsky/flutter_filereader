@@ -126,14 +126,14 @@ class _HomePageState extends State<HomePage> {
       }
     }
     Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
-      return FileReaderPage(
+      return ResourcePreviewPage(
         filePath: localPath,
       );
     }));
   }
 
   fileLocalName(String type, String assetPath) async {
-    String dic = await _localSavedDir() + "/filereader/files/";
+    String dic = await _localSavedDir() + "/file_preview/files/";
     return dic + base64.encode(utf8.encode(assetPath)) + "." + type;
   }
 

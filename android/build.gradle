@@ -1,4 +1,4 @@
-group 'com.webview.flutter_filereader'
+group 'com.webview.flutter_file_preview'
 version '1.0-SNAPSHOT'
 buildscript {
     repositories {

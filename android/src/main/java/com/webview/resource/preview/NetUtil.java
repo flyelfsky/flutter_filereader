@@ -1,4 +1,4 @@
-package com.webview.filereader;
+package com.webview.resource.preview;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

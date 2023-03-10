@@ -1,5 +1,5 @@
 //
-//  FileReaderFactory.swift
+//  ResourcePreviewFactory.swift
 //  flutter_filereader
 //
 //  Created by 胡杰 on 2019/3/6.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class FileReaderFactory: NSObject,FlutterPlatformViewFactory {
+class ResourcePreviewFactory: NSObject,FlutterPlatformViewFactory {
     
     var _messenger : FlutterBinaryMessenger?
     
@@ -32,7 +32,7 @@ class FileReaderFactory: NSObject,FlutterPlatformViewFactory {
     func create(withFrame frame: CGRect, viewIdentifier viewId: Int64, arguments args: Any?) -> FlutterPlatformView {
         
         
-        return FileReaderView(withFrame: frame, viewIdentifier: viewId, arguments: args, binaryMessenger: _messenger!)
+        return ResourcePreviewView(withFrame: frame, viewIdentifier: viewId, arguments: args, binaryMessenger: _messenger!)
         
     }
     

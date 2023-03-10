@@ -1,5 +1,5 @@
 //
-//  FileReaderWKWebView.swift
+//  ResourcePreviewWKWebView.swift
 //  flutter_downloader
 //
 //  Created by 胡杰 on 2019/10/21.
@@ -8,7 +8,7 @@
 import UIKit
 import WebKit
 
-class FileReaderWKWebView : WKWebView {
+class ResourcePreviewWKWebView : WKWebView {
     
   
 

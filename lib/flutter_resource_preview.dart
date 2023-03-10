@@ -2,24 +2,26 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_filereader/filereader.dart';
 
-class FileReaderView extends StatefulWidget {
+import 'resource_preview.dart';
+
+class ResourcePreviewView extends StatefulWidget {
   final String? filePath; //local path
   final Function(bool)? openSuccess;
   final Widget? loadingWidget;
   final Widget? unSupportFileWidget;
+  final Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers;
 
-  FileReaderView({Key? key, required this.filePath, this.openSuccess, this.loadingWidget, this.unSupportFileWidget}) : super(key: key);
+  ResourcePreviewView({Key? key, required this.filePath, this.gestureRecognizers, this.openSuccess, this.loadingWidget, this.unSupportFileWidget}) : super(key: key);
 
   @override
-  _FileReaderViewState createState() => _FileReaderViewState();
+  _ResourcePreviewViewState createState() => _ResourcePreviewViewState();
 }
 
-class _FileReaderViewState extends State<FileReaderView> {
-  FileReaderState _status = FileReaderState.LOADING_ENGINE;
+class _ResourcePreviewViewState extends State<ResourcePreviewView> {
+  ResourcePreviewState _status = ResourcePreviewState.LOADING_ENGINE;
   String? filePath;
 
   @override
@@ -30,22 +32,22 @@ class _FileReaderViewState extends State<FileReaderView> {
       if (exists) {
         _checkOnLoad();
       } else {
-        _setStatus(FileReaderState.FILE_NOT_FOUND);
+        _setStatus(ResourcePreviewState.FILE_NOT_FOUND);
       }
     });
   }
 
   _checkOnLoad() {
-    FileReader.instance.engineLoadStatus((success) {
+    ResourcePreview.instance.engineLoadStatus((success) {
       if (success) {
-        _setStatus(FileReaderState.ENGINE_LOAD_SUCCESS);
+        _setStatus(ResourcePreviewState.ENGINE_LOAD_SUCCESS);
       } else {
-        _setStatus(FileReaderState.ENGINE_LOAD_FAIL);
+        _setStatus(ResourcePreviewState.ENGINE_LOAD_FAIL);
       }
     });
   }
 
-  _setStatus(FileReaderState status) {
+  _setStatus(ResourcePreviewState status) {
     _status = status;
     if (mounted) {
       setState(() {});
@@ -55,19 +57,19 @@ class _FileReaderViewState extends State<FileReaderView> {
   @override
   Widget build(BuildContext context) {
     if (Platform.isAndroid || Platform.isIOS) {
-      if (_status == FileReaderState.LOADING_ENGINE) {
+      if (_status == ResourcePreviewState.LOADING_ENGINE) {
         return _loadingWidget();
-      } else if (_status == FileReaderState.UNSUPPORT_FILE) {
+      } else if (_status == ResourcePreviewState.UNSUPPORT_FILE) {
         return _unSupportFile();
-      } else if (_status == FileReaderState.ENGINE_LOAD_SUCCESS) {
+      } else if (_status == ResourcePreviewState.ENGINE_LOAD_SUCCESS) {
         if (Platform.isAndroid) {
           return _createAndroidView();
         } else {
           return _createIosView();
         }
-      } else if (_status == FileReaderState.ENGINE_LOAD_FAIL) {
+      } else if (_status == ResourcePreviewState.ENGINE_LOAD_FAIL) {
         return _enginLoadFail();
-      } else if (_status == FileReaderState.FILE_NOT_FOUND) {
+      } else if (_status == ResourcePreviewState.FILE_NOT_FOUND) {
         return _fileNotFoundFile();
       } else {
         return _loadingWidget();
@@ -106,13 +108,13 @@ class _FileReaderViewState extends State<FileReaderView> {
   }
 
   Widget _createAndroidView() {
-    return AndroidView(viewType: "FileReader", onPlatformViewCreated: _onPlatformViewCreated, creationParamsCodec: StandardMessageCodec());
+    return AndroidView(viewType: "ResourcePreview", onPlatformViewCreated: _onPlatformViewCreated, creationParamsCodec: StandardMessageCodec(), gestureRecognizers: widget.gestureRecognizers);
   }
 
   _onPlatformViewCreated(int id) {
-    FileReader.instance.openFile(id, filePath!, (success) {
+    ResourcePreview.instance.openFile(id, filePath!, (success) {
       if (!success) {
-        _setStatus(FileReaderState.UNSUPPORT_FILE);
+        _setStatus(ResourcePreviewState.UNSUPPORT_FILE);
       }
       widget.openSuccess?.call(success);
     });
@@ -120,14 +122,14 @@ class _FileReaderViewState extends State<FileReaderView> {
 
   Widget _createIosView() {
     return UiKitView(
-      viewType: "FileReader",
+      viewType: "ResourcePreview",
       onPlatformViewCreated: _onPlatformViewCreated,
       creationParamsCodec: StandardMessageCodec(),
     );
   }
 
   String _fileType(String filePath) {
-    if (filePath == null || filePath.isEmpty) {
+    if (filePath.isEmpty) {
       return "";
     }
     int i = filePath.lastIndexOf('.');

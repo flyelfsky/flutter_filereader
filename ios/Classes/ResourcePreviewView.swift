@@ -1,6 +1,6 @@
 //
-//  FileReaderView.swift
-//  flutter_filereader
+//  ResourcePreviewView.swift
+//  flutter_file_preview
 //
 //  Created by 胡杰 on 2019/3/6.
 //
@@ -8,9 +8,9 @@
 import UIKit
 import WebKit
 
-class FileReaderView: NSObject,FlutterPlatformView {
+class ResourcePreviewView: NSObject,FlutterPlatformView {
     
-    var _webView: FileReaderWKWebView?
+    var _webView: ResourcePreviewWKWebView?
     
     
     
@@ -20,7 +20,7 @@ class FileReaderView: NSObject,FlutterPlatformView {
         
         super.init()
         
-        let channel = FlutterMethodChannel.init(name: "wv.io/FileReader_\(viewId)", binaryMessenger: messenger)
+        let channel = FlutterMethodChannel.init(name: "wv.io/ResourcePreview_\(viewId)", binaryMessenger: messenger)
         
         channel.setMethodCallHandler { (call, result) in
             if call.method == "openFile" {
@@ -41,7 +41,7 @@ class FileReaderView: NSObject,FlutterPlatformView {
             
         }
         
-        self._webView = FileReaderWKWebView.init(frame: frame)
+        self._webView = ResourcePreviewWKWebView.init(frame: frame)
         
     }
     

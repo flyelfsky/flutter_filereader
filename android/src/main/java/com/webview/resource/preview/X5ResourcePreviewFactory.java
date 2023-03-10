@@ -1,4 +1,4 @@
-package com.webview.filereader;
+package com.webview.resource.preview;
 
 import android.content.Context;
 
@@ -10,15 +10,15 @@ import io.flutter.plugin.platform.PlatformView;
 import io.flutter.plugin.platform.PlatformViewFactory;
 
 
-public class X5FileReaderFactory extends PlatformViewFactory {
+public class X5ResourcePreviewFactory extends PlatformViewFactory {
 
 
     private final BinaryMessenger messenger;
-    private FlutterFileReaderPlugin plugin;
+    private FlutterResourcePreviewPlugin plugin;
     private Context mContext;
 
 
-    public X5FileReaderFactory(BinaryMessenger messenger, Context context,FlutterFileReaderPlugin plugin) {
+    public X5ResourcePreviewFactory(BinaryMessenger messenger, Context context,FlutterResourcePreviewPlugin plugin) {
         super(StandardMessageCodec.INSTANCE);
         this.messenger = messenger;
         this.mContext = context;
@@ -30,6 +30,6 @@ public class X5FileReaderFactory extends PlatformViewFactory {
     public PlatformView create(Context context, int i, Object args) {
         Map<String, Object> params = (Map<String, Object>) args;
 
-        return new X5FileReaderView(mContext, messenger, i, params,plugin);
+        return new X5ResourcePreviewView(mContext, messenger, i, params,plugin);
     }
 }

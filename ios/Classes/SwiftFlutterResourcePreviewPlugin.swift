@@ -29,17 +29,17 @@ public func fileType(filePath:String?) -> String {
 }
 
 
-public class SwiftFlutterFileReaderPlugin: NSObject, FlutterPlugin {
+public class SwiftFlutterResourcePreviewPlugin: NSObject, FlutterPlugin {
     
-    static let channelName = "wv.io/FileReader"
+    static let channelName = "wv.io/ResourcePreview"
     
     
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(name: channelName, binaryMessenger: registrar.messenger())
-    let instance = SwiftFlutterFileReaderPlugin()
+    let instance = SwiftFlutterResourcePreviewPlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
     
-    registrar.register(FileReaderFactory.init(messenger: registrar.messenger()), withId: "FileReader")
+    registrar.register(ResourcePreviewFactory.init(messenger: registrar.messenger()), withId: "ResourcePreview")
     
   }
 

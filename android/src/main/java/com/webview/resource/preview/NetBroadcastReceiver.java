@@ -1,4 +1,4 @@
-package com.webview.filereader;
+package com.webview.resource.preview;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

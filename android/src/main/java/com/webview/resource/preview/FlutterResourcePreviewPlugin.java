@@ -1,4 +1,4 @@
-package com.webview.filereader;
+package com.webview.resource.preview;
 
 import android.content.Context;
 import android.content.IntentFilter;
@@ -28,11 +28,11 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
 /**
  * FlutterX5Plugin
  */
-public class FlutterFileReaderPlugin implements MethodChannel.MethodCallHandler, FlutterPlugin, ActivityAware {
+public class FlutterResourcePreviewPlugin implements MethodChannel.MethodCallHandler, FlutterPlugin, ActivityAware {
 
     private int x5LoadStatus = -1; // -1 未加载状态  5 成功 10 失败
 
-    public static final String channelName = "wv.io/FileReader";
+    public static final String channelName = "wv.io/ResourcePreview";
     private Context ctx;
     private MethodChannel methodChannel;
     private NetBroadcastReceiver netBroadcastReceiver;
@@ -60,12 +60,12 @@ public class FlutterFileReaderPlugin implements MethodChannel.MethodCallHandler,
         netBroadcastRegister(context);
     }
 
-    public FlutterFileReaderPlugin() {
+    public FlutterResourcePreviewPlugin() {
 
     }
 
     private void onDestory() {
-        Log.e("FileReader", "销毁");
+        Log.e("ResourcePreview", "销毁");
         if (netBroadcastReceiver != null && ctx != null) {
             ctx.unregisterReceiver(netBroadcastReceiver);
         }
@@ -82,9 +82,9 @@ public class FlutterFileReaderPlugin implements MethodChannel.MethodCallHandler,
      * Plugin registration.
      */
     public static void registerWith(Registrar registrar) {
-        FlutterFileReaderPlugin plugin = new FlutterFileReaderPlugin();
+        FlutterResourcePreviewPlugin plugin = new FlutterResourcePreviewPlugin();
         plugin.init(registrar.context(), registrar.messenger());
-        registrar.platformViewRegistry().registerViewFactory("FileReader", new X5FileReaderFactory(registrar.messenger(), registrar.activity(), plugin));
+        registrar.platformViewRegistry().registerViewFactory("ResourcePreview", new X5ResourcePreviewFactory(registrar.messenger(), registrar.activity(), plugin));
     }
 
 
@@ -109,7 +109,7 @@ public class FlutterFileReaderPlugin implements MethodChannel.MethodCallHandler,
 
 
     public void initX5(final Context context) {
-        Log.e("FileReader", "初始化X5");
+        Log.e("ResourcePreview", "初始化X5");
         ///不获取AndroidID
         QbSdk.canGetAndroidId(false);
         ///不获取设备IMEI
@@ -133,17 +133,17 @@ public class FlutterFileReaderPlugin implements MethodChannel.MethodCallHandler,
         QbSdk.setTbsListener(new TbsListener() {
             @Override
             public void onDownloadFinish(int i) {
-                Log.e("FileReader", "TBS下载完成" + i);
+                Log.e("ResourcePreview", "TBS下载完成" + i);
             }
 
             @Override
             public void onInstallFinish(int i) {
-                Log.e("FileReader", "TBS安装完成 " + i);
+                Log.e("ResourcePreview", "TBS安装完成 " + i);
             }
 
             @Override
             public void onDownloadProgress(int i) {
-                Log.e("FileReader", "TBS下载进度:" + i);
+                Log.e("ResourcePreview", "TBS下载进度:" + i);
             }
         });
         QbSdk.initX5Environment(context, preInitCallback);
@@ -168,7 +168,7 @@ public class FlutterFileReaderPlugin implements MethodChannel.MethodCallHandler,
             QbSdk.openFileReader(ctx, filePath, params, new ValueCallback<String>() {
                 @Override
                 public void onReceiveValue(String s) {
-                    Log.d("FileReader", "openFileReader->" + s);
+                    Log.d("ResourcePreview", "openFileReader->" + s);
                 }
             });
 
@@ -193,37 +193,37 @@ public class FlutterFileReaderPlugin implements MethodChannel.MethodCallHandler,
 
     @Override
     public void onAttachedToEngine(FlutterPluginBinding binding) {
-        Log.e("FileReader", "onAttachedToEngine");
+        Log.e("ResourcePreview", "onAttachedToEngine");
 
         pluginBinding = binding;
     }
 
     @Override
     public void onDetachedFromEngine(FlutterPluginBinding binding) {
-        Log.e("FileReader", "onDetachedFromEngine");
+        Log.e("ResourcePreview", "onDetachedFromEngine");
         onDestory();
     }
 
     @Override
     public void onAttachedToActivity(ActivityPluginBinding binding) {
-        Log.e("FileReader", "onAttachedToActivity");
+        Log.e("ResourcePreview", "onAttachedToActivity");
         init(pluginBinding.getApplicationContext(), pluginBinding.getBinaryMessenger());
-        pluginBinding.getPlatformViewRegistry().registerViewFactory("FileReader", new X5FileReaderFactory(pluginBinding.getBinaryMessenger(), binding.getActivity(), this));
+        pluginBinding.getPlatformViewRegistry().registerViewFactory("ResourcePreview", new X5ResourcePreviewFactory(pluginBinding.getBinaryMessenger(), binding.getActivity(), this));
     }
 
     @Override
     public void onDetachedFromActivityForConfigChanges() {
-        Log.e("FileReader", "onDetachedFromActivityForConfigChanges");
+        Log.e("ResourcePreview", "onDetachedFromActivityForConfigChanges");
     }
 
     @Override
     public void onReattachedToActivityForConfigChanges(ActivityPluginBinding binding) {
-        Log.e("FileReader", "onReattachedToActivityForConfigChanges");
+        Log.e("ResourcePreview", "onReattachedToActivityForConfigChanges");
     }
 
     @Override
     public void onDetachedFromActivity() {
-        Log.e("FileReader", "onDetachedFromActivity");
+        Log.e("ResourcePreview", "onDetachedFromActivity");
     }
 
 
@@ -231,7 +231,7 @@ public class FlutterFileReaderPlugin implements MethodChannel.MethodCallHandler,
 
         @Override
         public void onCoreInitFinished() {
-            Log.e("FileReader", "TBS内核初始化结束");
+            Log.e("ResourcePreview", "TBS内核初始化结束");
         }
 
         @Override
@@ -241,11 +241,11 @@ public class FlutterFileReaderPlugin implements MethodChannel.MethodCallHandler,
             }
             if (b) {
                 x5LoadStatus = 5;
-                Log.e("FileReader", "TBS内核初始化成功" + "--" + QbSdk.canLoadX5(ctx));
+                Log.e("ResourcePreview", "TBS内核初始化成功" + "--" + QbSdk.canLoadX5(ctx));
             } else {
                 x5LoadStatus = 10;
                 resetQbSdkInit();
-                Log.e("FileReader", "TBS内核初始化失败" + "--" + QbSdk.canLoadX5(ctx));
+                Log.e("ResourcePreview", "TBS内核初始化失败" + "--" + QbSdk.canLoadX5(ctx));
             }
             onX5LoadComplete();
         }

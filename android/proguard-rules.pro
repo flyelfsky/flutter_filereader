@@ -1,6 +1,6 @@
 
 
--keep class com.webview.filereader.**{*;}
+-keep class com.webview.file.preview.**{*;}
 
 -dontoptimize
 -dontusemixedcaseclassnames

@@ -1,4 +1,4 @@
-package com.webview.filereader;
+package com.webview.resource.preview;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -17,20 +17,20 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.platform.PlatformView;
 
-public class X5FileReaderView implements PlatformView, MethodChannel.MethodCallHandler, TbsReaderView.ReaderCallback {
+public class X5ResourcePreviewView implements PlatformView, MethodChannel.MethodCallHandler, TbsReaderView.ReaderCallback {
     private MethodChannel methodChannel;
     private TbsReaderView readerView;
 
     private String tempPath;
 
 
-    FlutterFileReaderPlugin plugin;
+    FlutterResourcePreviewPlugin plugin;
 
 
-    X5FileReaderView(Context context, BinaryMessenger messenger, int id, Map<String, Object> params, FlutterFileReaderPlugin plugin) {
+    X5ResourcePreviewView(Context context, BinaryMessenger messenger, int id, Map<String, Object> params, FlutterResourcePreviewPlugin plugin) {
         this.plugin = plugin;
         tempPath = context.getCacheDir() + "/" + "TbsReaderTemp";
-        methodChannel = new MethodChannel(messenger, FlutterFileReaderPlugin.channelName + "_" + id);
+        methodChannel = new MethodChannel(messenger, FlutterResourcePreviewPlugin.channelName + "_" + id);
         methodChannel.setMethodCallHandler(this);
         //这里的Context需要Activity
         readerView = new TbsReaderView(context, this);
@@ -114,7 +114,7 @@ public class X5FileReaderView implements PlatformView, MethodChannel.MethodCallH
 
     @Override
     public void dispose() {
-        Log.d("FileReader", "FileReader Close");
+        Log.d("ResourcePreview", "ResourcePreview Close");
         readerView.onStop();
         methodChannel.setMethodCallHandler(null);
         methodChannel = null;

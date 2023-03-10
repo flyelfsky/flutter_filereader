@@ -1,19 +1,19 @@
 import 'package:flutter/services.dart';
 
-class FileReader {
-  static FileReader _instance = FileReader._();
+class ResourcePreview {
+  static ResourcePreview _instance = ResourcePreview._();
 
-  factory FileReader() => _getInstance();
+  factory ResourcePreview() => _getInstance();
 
-  static FileReader get instance => _getInstance();
+  static ResourcePreview get instance => _getInstance();
 
-  static FileReader _getInstance() {
+  static ResourcePreview _getInstance() {
     return _instance;
   }
 
-  static const MethodChannel _channel = const MethodChannel('wv.io/FileReader');
+  static const MethodChannel _channel = const MethodChannel('wv.io/ResourcePreview');
 
-  FileReader._();
+  ResourcePreview._();
 
   //X5 engin  load state
   // -1 loading  5 success 10 fail
@@ -42,13 +42,13 @@ class FileReader {
   /// open file when platformview create
   /// filepath only support local path
   void openFile(int platformViewId, String filePath, Function(bool)? onOpen) {
-    MethodChannel('wv.io/FileReader' + "_$platformViewId").invokeMethod("openFile", filePath).then((openSuccess) {
+    MethodChannel('wv.io/ResourcePreview' + "_$platformViewId").invokeMethod("openFile", filePath).then((openSuccess) {
       onOpen?.call(openSuccess);
     });
   }
 }
 
-enum FileReaderState {
+enum ResourcePreviewState {
   LOADING_ENGINE, //loading engine
   ENGINE_LOAD_SUCCESS, //loading engine success
   ENGINE_LOAD_FAIL, //loading engine fail (only Android ,ios,Ignore)
